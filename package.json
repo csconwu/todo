@@ -1,0 +1,30 @@
+{
+  "name": "todo",
+  "version": "1.0.0",
+  "description": "simple to-do webpage",
+  "main": "(./src/index.js)",
+  "directories": {
+    "doc": "docs",
+    "src": "src"
+  },
+  "dependencies": {
+    "date-fns": "^2.10.0"
+  },
+  "devDependencies": {
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/conwu7/todo.git"
+  },
+  "author": "Clinton Onwu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/conwu7/todo/issues"
+  },
+  "homepage": "https://github.com/conwu7/todo#readme"
+}
