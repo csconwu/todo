@@ -2,7 +2,11 @@
 function createDiv() {return document.createElement('div')}
 function createElement(tag, className, attribute) {
     let element = document.createElement(tag);
-    element.classList.add(className);
+    if (className instanceof Array) {
+        for (let i=0; i<className.length; i++) {element.classList.add(className[i])}
+    } else {
+        element.classList.add(className);
+    }
     if (attribute) {element.setAttribute(attribute[0], attribute[1])}
     return element
 }
@@ -31,12 +35,16 @@ function createGrouperDiv(title, addElement, addTaskFunction) { //with button at
     appendElements(grouperDiv,[titleContainer, addButton, addElement, taskContainer]);
     return grouperDiv
 }
-function createTaskDiv(title) {
+function createTaskDiv(title, description) {
     let taskDiv = createElement('div', 'task',['title',title]);
     let titleContainer = createElement('div', 'taskTitleContainer');
     let taskTitle = createElementAndSetText('h4', 'taskTitle', title);
-    let taskContent = createElement('div','taskContent');
-    titleContainer.appendChild(taskTitle);
+    let expandButton = createElement('button', 'taskExpandbtn');
+    setInnerHtml(expandButton, 'h4', "↓");
+    let taskContent = createElement('div',['taskContent']);
+    setInnerHtml(taskContent,'p',description);
+    taskContent.classList.add('testFormExpand');
+    appendElements(titleContainer,[taskTitle,expandButton]);
     appendElements(taskDiv,[titleContainer,taskContent]);
     return taskDiv
 }
