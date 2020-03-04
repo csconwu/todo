@@ -30,7 +30,6 @@ import {setBlockOrNoneDisplay} from "./domEdit";
         element.querySelector('.grouperExpandbtn').addEventListener('click', function(e) {
             toggleExpandContent(element.querySelector('.taskContainer'));
         });
-        appearNewForm(element.querySelector('.taskContainer'));
         mainContentDiv.appendChild(element);
         return element;
     }
@@ -57,7 +56,6 @@ import {setBlockOrNoneDisplay} from "./domEdit";
             form.children[2].value,'');
         userArray[grouperIndex].tasks.push(newTask);
         closeTaskForm(e);
-        console.log(userArray);
     }
     function openNewGrouperForm() {
         newGrouperField.style.opacity = '1';
@@ -71,10 +69,11 @@ import {setBlockOrNoneDisplay} from "./domEdit";
         inputEle.forEach(input=>{input.style.opacity = '1'});
         appearNewForm(e.target.nextElementSibling)
     }
-    function calculateTotalChildrenHeight(element) {
-        let eleChildren = Array.from(element.children);
+    function calculateTotalHeight(elementArray) {
         let totalHeight = 0;
-        eleChildren.forEach(child=>{totalHeight+=child.scrollHeight});
+        for (let i=0;i<elementArray.length;i++) {
+            totalHeight += elementArray[i].scrollHeight;
+        }
         return totalHeight;
     }
     function appearNewForm(element) {
@@ -83,7 +82,8 @@ import {setBlockOrNoneDisplay} from "./domEdit";
     }
     function appearTaskContent(element) {
         // element.style.maxHeight = element.scrollHeight + 'px';
-        let heightMax = calculateTotalChildrenHeight(element.firstElementChild);
+        let heightMax = calculateTotalHeight(Array.from(element.querySelectorAll(".task>*")));
+        console.log(heightMax);
         element.style.maxHeight = heightMax + 100 + 'px';
     }
     function appearTask2Content(element) {
