@@ -154,7 +154,9 @@ textarea {
     width: 50%;
     left: 25vw;
     border-radius: 50px;
-    top: 30vh;
+    top: 10vh;
+    max-height: 80vh;
+    overflow-y: scroll;
     margin: auto;
     background-color: rgba(200,200,200,1); /* Black background with opacity */
     z-index: 2; /* Specify a stack order in case you're using a different order for other elements */

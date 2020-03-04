@@ -37,10 +37,11 @@ import {setBlockOrNoneDisplay} from "./domEdit";
     function createTaskElement(grouper, taskTitle, taskDescription) {
         let taskDiv = domEdit.createTaskDiv(taskTitle, taskDescription);
         taskDiv.querySelector('.taskExpandbtn').addEventListener('click', function(e) {
-            toggleExpandContent(taskDiv.querySelector('.taskContent'));
+            toggleExpandTaskContent(taskDiv.querySelector('.taskContent'));
         });
         grouper.children[3].appendChild(taskDiv);
-        appearTaskContent(taskDiv.querySelector('.taskContent'));
+        appearTaskContent(grouper.children[3]);
+        appearTask2Content(taskDiv.querySelector('.taskContent'));
     }
     function saveNewGrouper() {
         createGrouperElement(newGrouperField.value);
@@ -70,12 +71,23 @@ import {setBlockOrNoneDisplay} from "./domEdit";
         inputEle.forEach(input=>{input.style.opacity = '1'});
         appearNewForm(e.target.nextElementSibling)
     }
+    function calculateTotalChildrenHeight(element) {
+        let eleChildren = Array.from(element.children);
+        let totalHeight = 0;
+        eleChildren.forEach(child=>{totalHeight+=child.scrollHeight});
+        return totalHeight;
+    }
     function appearNewForm(element) {
         // element.style.maxHeight = element.scrollHeight + 'px';
-        element.style.maxHeight = 3000 + 'px';
+        element.style.maxHeight = 300 + element.scrollHeight + 'px';
     }
     function appearTaskContent(element) {
-        element.style.maxHeight = element.scrollHeight + 'px';
+        // element.style.maxHeight = element.scrollHeight + 'px';
+        let heightMax = calculateTotalChildrenHeight(element.firstElementChild);
+        element.style.maxHeight = heightMax + 100 + 'px';
+    }
+    function appearTask2Content(element) {
+        element.style.maxHeight = element.scrollHeight +'px';
     }
     function disappearNewForm(element) {
         // element.style.maxHeight = '50px';
@@ -87,6 +99,10 @@ import {setBlockOrNoneDisplay} from "./domEdit";
     function toggleExpandContent(element) {
         if (element.style.maxHeight) {disappearTaskContent(element)}
         else {appearTaskContent(element)}
+    }
+    function toggleExpandTaskContent(element) { //rename task2
+        if (element.style.maxHeight) {disappearTaskContent(element)}
+        else {appearTask2Content(element)}
     }
     function closeGrouperForm() {
         newGrouperField.style.opacity = '0';
