@@ -27,6 +27,10 @@ import {setBlockOrNoneDisplay} from "./domEdit";
         taskFormButtons[0].addEventListener('click',closeTaskForm);
         taskFormButtons[1].addEventListener('click',saveNewTask);
         let element = domEdit.createGrouperDiv(title,newTaskFormClone,openNewTaskForm);
+        element.querySelector('.grouperExpandbtn').addEventListener('click', function(e) {
+            toggleExpandContent(element.querySelector('.taskContainer'));
+        });
+        appearNewForm(element.querySelector('.taskContainer'));
         mainContentDiv.appendChild(element);
         return element;
     }
@@ -36,6 +40,7 @@ import {setBlockOrNoneDisplay} from "./domEdit";
             toggleExpandContent(taskDiv.querySelector('.taskContent'));
         });
         grouper.children[3].appendChild(taskDiv);
+        appearTaskContent(taskDiv.querySelector('.taskContent'));
     }
     function saveNewGrouper() {
         createGrouperElement(newGrouperField.value);
@@ -56,23 +61,25 @@ import {setBlockOrNoneDisplay} from "./domEdit";
     function openNewGrouperForm() {
         newGrouperField.style.opacity = '1';
         enableButtons([cancelNewGrouperButton, saveNewGrouperButton]);
-        domEdit.setBlockOrNoneDisplay([newGrouperForm],[newGrouperButton.parentElement]);
+        domEdit.setBlockOrNoneDisplay([newGrouperForm],[]);
         appearNewForm(newGrouperForm);
     }
     function openNewTaskForm(e) {
-        domEdit.setBlockOrNoneDisplay([e.target.nextElementSibling],[e.target]);
+        domEdit.setBlockOrNoneDisplay([e.target.nextElementSibling],[]);
         let inputEle = Array.from(e.target.nextElementSibling.querySelectorAll('[class*=Input]'));
         inputEle.forEach(input=>{input.style.opacity = '1'});
         appearNewForm(e.target.nextElementSibling)
     }
     function appearNewForm(element) {
-        element.style.maxHeight = element.scrollHeight + 'px';
+        // element.style.maxHeight = element.scrollHeight + 'px';
+        element.style.maxHeight = 3000 + 'px';
     }
     function appearTaskContent(element) {
         element.style.maxHeight = element.scrollHeight + 'px';
     }
     function disappearNewForm(element) {
-        element.style.maxHeight = '50px';
+        // element.style.maxHeight = '50px';
+        element.style.maxHeight = null;
     }
     function disappearTaskContent(element) {
         element.style.maxHeight = null;
@@ -97,7 +104,7 @@ import {setBlockOrNoneDisplay} from "./domEdit";
         inputEle.forEach(input=>{input.style.opacity = '0'});
         domEdit.clearDomInputValues(inputEle);
         const removeForm = setTimeout(function() {
-            domEdit.setBlockOrNoneDisplay([popup.previousElementSibling],[popup])
+            domEdit.setBlockOrNoneDisplay([],[popup])
         },500)
     }
     function enableButtons(buttonArray) {

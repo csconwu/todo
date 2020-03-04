@@ -28,7 +28,7 @@ function createGrouperDiv(title, addElement, addTaskFunction) { //with button at
     let grouperTitle = createElementAndSetText('h2','grouperTitle',title);
     let expandButton = createElement('button', 'grouperExpandbtn');
     let addButton = createElementAndSetText('button','newbtn','+',['type', 'button']);
-    let taskContainer = createElement('div','taskContainer');
+    let taskContainer = createElement('div',['taskContainer','testFormExpand']);
     addButton.addEventListener('click', addTaskFunction);
     setInnerHtml(expandButton, 'h2', "↓");
     appendElements(titleContainer,[grouperTitle,expandButton]);
