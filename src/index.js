@@ -69,21 +69,13 @@ import {setBlockOrNoneDisplay} from "./domEdit";
         inputEle.forEach(input=>{input.style.opacity = '1'});
         appearNewForm(e.target.nextElementSibling)
     }
-    function calculateTotalHeight(elementArray) {
-        let totalHeight = 0;
-        for (let i=0;i<elementArray.length;i++) {
-            totalHeight += elementArray[i].scrollHeight;
-        }
-        return totalHeight;
-    }
     function appearNewForm(element) {
         // element.style.maxHeight = element.scrollHeight + 'px';
         element.style.maxHeight = 300 + element.scrollHeight + 'px';
     }
     function appearTaskContent(element) {
         // element.style.maxHeight = element.scrollHeight + 'px';
-        let heightMax = calculateTotalHeight(Array.from(element.querySelectorAll(".task>*")));
-        console.log(heightMax);
+        let heightMax = domEdit.calculateTotalHeightWithMargin(Array.from(element.querySelectorAll(".task>*")),40);
         element.style.maxHeight = heightMax + 100 + 'px';
     }
     function appearTask2Content(element) {

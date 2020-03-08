@@ -53,6 +53,17 @@ function setBlockOrNoneDisplay(blockArray, noneArray) {
     for (let i=0; i<blockArray.length; i++) {blockArray[i].style.display = 'block'}
     for (let i=0; i<noneArray.length; i++) {noneArray[i].style.display = 'none'}
 }
-
+function calculateTotalHeight(elementArray) {
+    let totalHeight = 0;
+    for (let i=0;i<elementArray.length;i++) {
+        totalHeight += elementArray[i].scrollHeight;
+    }
+    return totalHeight;
+}
+function calculateTotalHeightWithMargin(elementArray, marginSize) {
+    let totalHeight = calculateTotalHeight(elementArray);
+    totalHeight += elementArray.length * marginSize;
+    return totalHeight;
+}
 export {createDiv, createElement, createGrouperDiv, createTaskDiv, appendElements, clearDomInputValues,
-    setBlockOrNoneDisplay}
+    setBlockOrNoneDisplay, calculateTotalHeightWithMargin}
