@@ -37,10 +37,12 @@ import {setBlockOrNoneDisplay} from "./domEdit";
         let taskDiv = domEdit.createTaskDiv(taskTitle, taskDescription);
         taskDiv.querySelector('.taskExpandbtn').addEventListener('click', function(e) {
             toggleExpandTaskContent(taskDiv.querySelector('.taskContent'));
+            toggleExpandTaskContent(taskDiv.querySelector('.modifyTaskContainer'))
         });
         grouper.children[3].appendChild(taskDiv);
-        appearTaskContent(grouper.children[3]);
+        appearTaskContent(grouper.children[3]); // fix this. Don't use nth style elements
         appearTask2Content(taskDiv.querySelector('.taskContent'));
+        appearTask2Content(taskDiv.querySelector('.modifyTaskContainer'));
     }
     function saveNewGrouper() {
         createGrouperElement(newGrouperField.value);

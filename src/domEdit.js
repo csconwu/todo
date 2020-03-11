@@ -44,8 +44,13 @@ function createTaskDiv(title, description) {
     let taskContent = createElement('div',['taskContent']);
     setInnerHtml(taskContent,'p',description);
     taskContent.classList.add('testFormExpand');
+    let modifyTaskButtonsContainer = createElement('div',['modifyTaskContainer','testFormExpand']);
+    let editTaskButton = createElementAndSetText('button',['modifyTask'],'Edit',['type','button']);
+    let deleteTaskButton = createElementAndSetText('button',['modifyTask'],'Delete',['type','button']);
+    let statusTaskButton = createElementAndSetText('button',['modifyTask'],'Done?',['type','button']);
+    appendElements(modifyTaskButtonsContainer,[editTaskButton,deleteTaskButton,statusTaskButton]);
     appendElements(titleContainer,[taskTitle,expandButton]);
-    appendElements(taskDiv,[titleContainer,taskContent]);
+    appendElements(taskDiv,[titleContainer,taskContent,modifyTaskButtonsContainer]);
     return taskDiv
 }
 function clearDomInputValues(inputArray) {for (let i=0; i<inputArray.length;i++) {inputArray[i].value = null}}
@@ -55,9 +60,7 @@ function setBlockOrNoneDisplay(blockArray, noneArray) {
 }
 function calculateTotalHeight(elementArray) {
     let totalHeight = 0;
-    for (let i=0;i<elementArray.length;i++) {
-        totalHeight += elementArray[i].scrollHeight;
-    }
+    for (let i=0;i<elementArray.length;i++) {totalHeight += elementArray[i].scrollHeight;}
     return totalHeight;
 }
 function calculateTotalHeightWithMargin(elementArray, marginSize) {
