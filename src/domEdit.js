@@ -22,7 +22,11 @@ function appendElements(parent, sourceListArray) {
     for (let i=0;i<sourceListArray.length;i++) {parent.appendChild(sourceListArray[i])}
     return parent
 }
-function clearDomInputValues(inputArray) {for (let i=0; i<inputArray.length;i++) {inputArray[i].value = null}}
+function clearDomInputValues(inputArray) {
+    for (let i=0; i<inputArray.length;i++) {
+        inputArray[i].value = null;
+    }
+}
 function setBlockOrNoneDisplay(blockArray, noneArray) {
     for (let i=0; i<blockArray.length; i++) {blockArray[i].style.display = 'block'}
     for (let i=0; i<noneArray.length; i++) {noneArray[i].style.display = 'none'}
@@ -41,11 +45,11 @@ function createGrouperDiv(title, addElement, addTaskFunction) { //with button at
     let grouperDiv = createElement('div', 'grouper',['title',title]);
     let titleContainer = createElement('div', 'grouperTitleContainer');
     let grouperTitle = createElementAndSetText('h2','grouperTitle',title);
-    let expandButton = createElement('button', 'grouperExpandbtn');
+    let expandButton = createElement('button', ['grouperExpandbtn']);
     let addButton = createElementAndSetText('button','newbtn','+',['type', 'button']);
     let allTasksContainer = createElement('div',['allTasksContainer','testFormExpand']);
     addButton.addEventListener('click', addTaskFunction);
-    setInnerHtml(expandButton, 'h2', "↓");
+    setInnerHtml(expandButton, 'h2', "↕");
     appendElements(titleContainer,[grouperTitle,expandButton]);
     appendElements(grouperDiv,[titleContainer, addButton, addElement, allTasksContainer]);
     return grouperDiv
@@ -55,14 +59,17 @@ function createTaskDiv(title, description) {
     let titleContainer = createElement('div', 'taskTitleContainer');
     let taskTitle = createElementAndSetText('h4', 'taskTitle', title);
     let expandButton = createElement('button', 'taskExpandbtn');
-    setInnerHtml(expandButton, 'h4', "↓");
+    setInnerHtml(expandButton, 'h4', "↕");
     let taskContent = createElement('div',['taskContent']);
     setInnerHtml(taskContent,'p',description);
     taskContent.classList.add('testFormExpand');
     let modifyTaskButtonsContainer = createElement('div',['modifyTaskContainer','testFormExpand']);
-    let editTaskButton = createElementAndSetText('button',['modifyTask', 'editTask'],'Edit',['type','button']);
-    let deleteTaskButton = createElementAndSetText('button',['modifyTask', 'deleteTask'],'Delete',['type','button']);
-    let statusTaskButton = createElementAndSetText('button',['modifyTask', 'changeTaskStatus'],'Done?',['type','button']);
+    let editTaskButton = createElementAndSetText('button',['modifyTask', 'editTask'],
+        'Edit',['type','button']);
+    let deleteTaskButton = createElementAndSetText('button',['modifyTask', 'deleteTask'],
+        'Delete',['type','button']);
+    let statusTaskButton = createElementAndSetText('button',['modifyTask', 'changeTaskStatus'],
+        'Done?',['type','button']);
     appendElements(modifyTaskButtonsContainer,[editTaskButton,deleteTaskButton,statusTaskButton]);
     appendElements(titleContainer,[taskTitle,expandButton]);
     appendElements(taskDiv,[titleContainer,taskContent,modifyTaskButtonsContainer]);
