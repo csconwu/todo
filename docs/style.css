@@ -127,7 +127,7 @@ textarea {
     display: inline-block;
     background-color: rgba(211,211,211,0.6);
     border-radius: 10px;
-    width: 95%;
+    width: 30%;
     word-wrap: break-word;
     vertical-align: top;
     padding-bottom: 10px;
@@ -135,7 +135,7 @@ textarea {
 .taskTitle {
     padding: 10px;
     min-height: 50px;
-    width: 80%;
+    width: 70%;
     font-size: 200%;
     margin: 10px;
     color: darkslategrey;
@@ -191,4 +191,12 @@ textarea {
     margin: auto;
     background-color: rgba(200,200,200,1); /* Black background with opacity */
     z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+}
+@media only screen and (max-width: 980px) {
+    .task {
+        width: 95%;
+    }
+    .taskTitle {
+        width: 85%;
+    }
 }
