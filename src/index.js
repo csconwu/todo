@@ -41,6 +41,7 @@ import {setBlockOrNoneDisplay} from "./domEdit";
         });
         taskDiv.querySelector('.editTask').addEventListener('click',openExistingTaskForm);
         taskDiv.querySelector('.deleteTask').addEventListener('click',deleteExistingTask);
+        taskDiv.querySelector('.changeTaskStatus').addEventListener('click',toggleTaskStatus);
         return taskDiv;
     }
     function renderNewTaskElement(grouperTasksContainer, newTaskDiv) {
@@ -89,7 +90,7 @@ import {setBlockOrNoneDisplay} from "./domEdit";
             values.push(groupersTaskForm.children[1].value.replace(/\n\r?/g, '<br />'));
         }
         values.push(groupersTaskForm.children[2].value);
-        const newTask = taskEdit.createTaskObject(values[0],values[1],null,values[2],null);
+        const newTask = taskEdit.createTaskObject(values[0],values[1],null,values[2],false);
         const newTaskDiv = createTaskElement(newTask.title, newTask.description);
         return {newTask, newTaskDiv};
     }
@@ -98,6 +99,18 @@ import {setBlockOrNoneDisplay} from "./domEdit";
         const modifyItems = getItemsForModifyTask(e);
         modifyItems.grouperObj.tasks.splice(modifyItems.taskIndex,1);
         modifyItems.taskDiv.remove();
+    }
+    function toggleTaskStatus(e) {
+        const modifyItems = getItemsForModifyTask(e);
+        if (modifyItems.taskDiv.classList.contains('taskIsDone')) {
+            modifyItems.taskDiv.classList.remove('taskIsDone');
+            e.target.textContent = "Done?";
+            modifyItems.taskObj.status = false;
+        } else {
+            modifyItems.taskDiv.classList.add('taskIsDone');
+            e.target.textContent = "Not Done?"
+            modifyItems.taskObj.status = true;
+        }
     }
     function saveExistingTask(newGrouperItems, newTaskItems) {
         const grouperIndex = getGrouperIndex(newGrouperItems.grouperElement);

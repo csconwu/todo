@@ -58,8 +58,9 @@ function createTaskDiv(title, description) {
     let taskDiv = createElement('div', 'task',['title',title]);
     let titleContainer = createElement('div', 'taskTitleContainer');
     let taskTitle = createElementAndSetText('h4', 'taskTitle', title);
-    let expandButton = createElement('button', 'taskExpandbtn');
+    let expandButton = createElement('button', ['taskExpandbtn']);
     setInnerHtml(expandButton, 'h4', "↕");
+    expandButton.firstElementChild.classList.add('noStrike');
     let taskContent = createElement('div',['taskContent']);
     setInnerHtml(taskContent,'p',description);
     taskContent.classList.add('testFormExpand');

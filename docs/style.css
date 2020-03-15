@@ -177,6 +177,9 @@ textarea {
 #newGrouperTitleField, .taskTitleInput {
     transition: all 300ms;
 }
+.taskIsDone p,.taskIsDone h4:not(.noStrike) {
+    text-decoration: line-through;
+}
 .overlayForm {
     position: fixed; /* Sit on top of the page content */
     width: 50%;
