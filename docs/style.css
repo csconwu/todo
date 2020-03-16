@@ -26,6 +26,7 @@ header h1{
     padding-top: 10px;
     padding-bottom: 30px;
     text-align: left;
+    min-width: 700px;
 }
 .grouperTitleContainer {
     text-align: left;
@@ -93,7 +94,7 @@ header h1{
 .newGrouperForm button, .newTaskForm button {
     width: 120px;
     font-size: 150%;
-    outline: none;
+    outline: solid 1px;
     border: none;
     margin: 30px;
     padding: 20px;
@@ -121,6 +122,7 @@ textarea {
 .allTasksContainer {
     margin: 20px;
     text-align: left;
+    min-width: 750px;
 }
 .task {
     margin: 20px;
@@ -159,6 +161,15 @@ textarea {
     justify-items: center;
     padding: 0 10px;
 }
+.modifyGrouperContainer {
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr;
+    grid-gap: 10px;
+    justify-items: center;
+    padding: 5px 10px;
+    width: 60%;
+    margin-left: 30px;
+}
 .modifyTask {
     font-size: 120%;
     background-color: inherit;
@@ -169,6 +180,17 @@ textarea {
     border-radius: 5px;
     margin: 10px;
     text-decoration: underline darkgray;
+}
+.modifyGrouper {
+    font-size: 150%;
+    background-color: lightgray;
+    width: 100%;
+    height: 70px;
+    outline: none;
+    margin: 10px;
+    border: solid 1px darkgray;
+    border-radius: 10px;
+    color: gray;
 }
 .modifyTask:hover {
     background-color: darkgray;
@@ -198,5 +220,8 @@ textarea {
     }
     .taskTitle {
         width: 85%;
+    }
+    .modifyGrouperContainer {
+        width: 80%;
     }
 }

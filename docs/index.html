@@ -14,22 +14,22 @@
             <div><button id="newGrouperbtn" class="newbtn newGrouperbtn">+</button></div>
             <div id="newGrouperPopup" class="newGrouperPopup testFormExpand overlayForm">
                 <form id="newGrouperForm" class="newGrouperForm">
-                    <input id="newGrouperTitleField" type="text" placeholder="Enter New Task Group Here" required>
+                    <input id="newGrouperTitleField" type="text" placeholder="Enter New Task Group Here" tabindex="1" required>
                     <div>
-                        <button type="button" class="cancelbtn">Cancel</button>
-                        <button type="button" class="savebtn">Save</button>
+                        <button type="button" class="cancelbtn" tabindex="2">Cancel</button>
+                        <button type="button" class="savebtn" tabindex="3">Save</button>
                     </div>
                 </form>
             </div>
         </div>
         <div class="newTaskPopup hidden testFormExpand overlayForm">
                 <form class="newTaskForm">
-                    <input class="taskTitleInput" type="text" placeholder="Enter Task Title">
-                    <textarea class="taskDescriptionInput" placeholder="Enter Description Here"></textarea>
-                    <input class="dueDateInput" type="date">
+                    <input class="taskTitleInput" tabindex="1" type="text" placeholder="Enter Task Title">
+                    <textarea class="taskDescriptionInput" tabindex="2" placeholder="Enter Description Here"></textarea>
+                    <input class="dueDateInput" tabindex="3" type="date">
                     <div>
-                        <button type="button" class="cancelbtn">Cancel</button>
-                        <button type="button" class="savebtn">Save</button>
+                        <button type="button" tabindex="4" class="cancelbtn">Cancel</button>
+                        <button type="button" tabindex="5" class="savebtn">Save</button>
                     </div>
                 </form>
             </div>

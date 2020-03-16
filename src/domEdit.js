@@ -46,12 +46,18 @@ function createGrouperDiv(title, addElement, addTaskFunction) { //with button at
     let titleContainer = createElement('div', 'grouperTitleContainer');
     let grouperTitle = createElementAndSetText('h2','grouperTitle',title);
     let expandButton = createElement('button', ['grouperExpandbtn']);
-    let addButton = createElementAndSetText('button','newbtn','+',['type', 'button']);
     let allTasksContainer = createElement('div',['allTasksContainer','testFormExpand']);
+    let modifyGrouperContainer = createElement('div',['modifyGrouperContainer']);
+    let addButton = createElementAndSetText('button',['newbtn','modifyGrouper'],'+ Add New Task',['type', 'button']);
+    let renameButton = createElementAndSetText('button',['modifyGrouper', 'renameGrouper'],
+        'Rename This Project Grouper',['type','button']);
+    let deleteButton = createElementAndSetText('button',['modifyGrouper','deleteGrouper'],
+        'Delete this Project Grouper',['type', 'button']);
     addButton.addEventListener('click', addTaskFunction);
     setInnerHtml(expandButton, 'h2', "↕");
     appendElements(titleContainer,[grouperTitle,expandButton]);
-    appendElements(grouperDiv,[titleContainer, addButton, addElement, allTasksContainer]);
+    appendElements(modifyGrouperContainer,[addButton,renameButton,deleteButton])
+    appendElements(grouperDiv,[titleContainer, modifyGrouperContainer, addElement, allTasksContainer]);
     return grouperDiv
 }
 function createTaskDiv(title, description) {

@@ -157,7 +157,7 @@ import {setBlockOrNoneDisplay} from "./domEdit";
         },100);
     }
     function openNewTaskForm(e) {
-        bringUpTaskForm(e.target.nextElementSibling);
+        bringUpTaskForm(e.target.parentElement.nextElementSibling);
     }
     function openExistingTaskForm(e) {
         const modifyItems = getItemsForModifyTask(e);
@@ -185,7 +185,7 @@ import {setBlockOrNoneDisplay} from "./domEdit";
     function expandGrouperTasks(element) {
         const heightMax = domEdit.calculateTotalHeightWithMargin(
             Array.from(element.querySelectorAll(".task>*")),40);
-        element.style.maxHeight = heightMax + 100 + 'px';
+        element.style.maxHeight = heightMax + 500 + 'px';
     }
     function expandTaskContents(element) {
         element.style.maxHeight = element.scrollHeight +'px';
@@ -213,8 +213,14 @@ import {setBlockOrNoneDisplay} from "./domEdit";
     function disableButtons(buttonArray) {
         for (let i=0;i<buttonArray.length;i++) {buttonArray[i].disabled = true}
     }
+    function preventEnterOnFields(e) {
+        if (e.key === 'Enter' && document.activeElement.tagName === 'input') {
+            e.preventDefault();
+        }
+    }
     saveNewGrouperButton.addEventListener('click',saveNewGrouper);
     newGrouperButton.addEventListener('click',openNewGrouperForm);
     cancelNewGrouperButton.addEventListener('click',cancelNewGrouper);
+    window.addEventListener('keypress', preventEnterOnFields);
 
 })();
