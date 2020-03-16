@@ -99,11 +99,10 @@ import {setBlockOrNoneDisplay} from "./domEdit";
     }
     function deleteExistingGrouper(e) {
         if (window.confirm("This will delete this Project grouper and all it's tasks within it." +
-            "\n Are you sure you want to proceed?") !== true) {return}
+            "\nAre you sure you want to proceed?") !== true) {return}
         const modifyItems = getItemsForModifyGrouper(e);
         userArray.splice(modifyItems.grouperIndex,1);
         modifyItems.grouperDiv.remove();
-        console.log(userArray);
     }
     function deleteExistingTask(e) {
         if (window.confirm('Are you sure you want to delete this task?') !== true) {return}
@@ -123,6 +122,33 @@ import {setBlockOrNoneDisplay} from "./domEdit";
             modifyItems.taskObj.status = true;
         }
     }
+    function saveGrouperChecks(newTitle) {
+        const alreadyExists = userArray.some(grouper => {
+            return grouper.title === newTitle && userArray.currentGrouperEditingTitle !== newTitle
+        });
+        if (alreadyExists) {
+            return "You already have another project grouper with this title.\n" + "Please choose another name"
+        } else if (newTitle.length > 25) {
+            return "Please reduce the length of the title to 25 characters or less. "+`(currently ${newTitle.length})`
+        } else {
+            return null
+        }
+    }
+    function saveTaskChecks(grouperIndex, newTaskTitle, newTaskDescription) {
+        const alreadyExists = userArray[grouperIndex].tasks.some(task=> {
+            return task.title === newTaskTitle && userArray[grouperIndex].currentTaskEditingTitle !== newTaskTitle
+        });
+        if (alreadyExists) {
+            return "You already have another task in this Project with this title.\n"+"Please choose another name"
+        } else if (newTaskTitle.length > 50) {
+            return "Please reduce the length of the title to 50 characters or less. "+`(currently ${newTaskTitle.length})`
+        } else if (newTaskDescription.length > 1000) {
+            return "Please reduce the length of the description to 1000 characters or less. "+
+                `(currently ${newTaskDescription.length})`
+        } else {
+            return null
+        }
+    }
     function saveNewGrouper() {
         createGrouperElement(newGrouperField.value);
         userArray.push(taskEdit.createNewGrouper(newGrouperField.value));
@@ -135,32 +161,42 @@ import {setBlockOrNoneDisplay} from "./domEdit";
         closeGrouperForm();
     }
     function saveGrouper() {
+        const checkMessage = saveGrouperChecks(newGrouperField.value);
+        if (checkMessage) {
+            window.alert(checkMessage);
+            return;
+        }
         if (newGrouperPopup.classList.contains('editingExistingGrouper')) {
             saveExistingGrouper();
         } else {
             saveNewGrouper();
         }
     }
-    function saveExistingTask(newGrouperItems, newTaskItems) {
-        const grouperIndex = getGrouperIndex(newGrouperItems.grouperElement);
+    function saveExistingTask(newGrouperItems, newTaskItems,grouperIndex) {
         userArray[grouperIndex].replaceExistingTask(userArray[grouperIndex].currentTaskEditingIndex,
             newTaskItems.newTask);
         renderExistingTaskElement(userArray[grouperIndex].currentTaskEditingTitle,newTaskItems.newTaskDiv);
     }
-    function saveNewTask(newGrouperItems, newTaskItems) {
-        const grouperIndex = getGrouperIndex(newGrouperItems.grouperElement);
+    function saveNewTask(newGrouperItems, newTaskItems, grouperIndex) {
         userArray[grouperIndex].addNewTask(newTaskItems.newTask);
         renderNewTaskElement(newGrouperItems.grouperElement.querySelector('.allTasksContainer'),newTaskItems.newTaskDiv);
     }
     function saveTask(e) {
         const newGrouperItems = getGrouperAndFormElements(e);
         const newTaskItems = taskCreationPlaceHolder(newGrouperItems.grouperElement,newGrouperItems.form);
-        if (newGrouperItems.form.parentElement.classList.contains('editingExistingTask')) {
-            saveExistingTask(newGrouperItems,newTaskItems);
-        } else {
-            saveNewTask(newGrouperItems,newTaskItems);
+        const grouperIndex = getGrouperIndex(newGrouperItems.grouperElement);
+
+        const checkMessage = saveTaskChecks(grouperIndex,newTaskItems.newTask.title, newTaskItems.newTask.description);
+        if (checkMessage) {
+            window.alert(checkMessage);
+            return;
         }
-        closeTaskForm(e);
+        if (newGrouperItems.form.parentElement.classList.contains('editingExistingTask')) {
+            saveExistingTask(newGrouperItems,newTaskItems,grouperIndex);
+        } else {
+            saveNewTask(newGrouperItems,newTaskItems,grouperIndex);
+        }
+        closeTaskForm(e, userArray[grouperIndex]);
     }
     function cancelNewGrouper() {closeGrouperForm()}
     function bringUpForm(form) {
@@ -209,12 +245,15 @@ import {setBlockOrNoneDisplay} from "./domEdit";
         modifyItems.grouperTaskForm.querySelector('.dueDateInput').value = modifyItems.taskObj.dueDate;
         bringUpTaskForm(modifyItems.grouperTaskForm);
     }
-    function closeTaskForm(e) {
+    function clearCurrentEditingTaskItems(grouperObj) {
+        grouperObj.removeExistingItemsToEdit();
+    }
+    function closeTaskForm(e, grouperObj) {
         let popup = e.target.parentElement.parentElement.parentElement;
         popup.classList.remove('editingExistingTask');
+        clearCurrentEditingTaskItems(grouperObj);
         testShrinkForm(popup);
-        let inputEle = Array.from(popup.querySelectorAll('[class*=Input]'));
-        domEdit.clearDomInputValues(inputEle);
+        domEdit.clearInputClassValues(popup);
         const removeForm = setTimeout(function() {
             domEdit.setBlockOrNoneDisplay([],[popup])
         },500)

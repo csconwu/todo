@@ -27,6 +27,10 @@ function clearDomInputValues(inputArray) {
         inputArray[i].value = null;
     }
 }
+function clearInputClassValues(ancestorElement) {
+    let inputElements = Array.from(ancestorElement.querySelectorAll('[class*=Input'));
+    clearDomInputValues(inputElements);
+}
 function setBlockOrNoneDisplay(blockArray, noneArray) {
     for (let i=0; i<blockArray.length; i++) {blockArray[i].style.display = 'block'}
     for (let i=0; i<noneArray.length; i++) {noneArray[i].style.display = 'none'}
@@ -85,4 +89,4 @@ function createTaskDiv(title, description) {
     return taskDiv
 }
 export {createDiv, createElement, createGrouperDiv, createTaskDiv, appendElements, clearDomInputValues,
-    setBlockOrNoneDisplay, calculateTotalHeightWithMargin}
+    setBlockOrNoneDisplay, calculateTotalHeightWithMargin, clearInputClassValues}

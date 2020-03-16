@@ -20,6 +20,10 @@ function createGrouper(title, numOfTasks, tasks, id, currentTaskEditingIndex, cu
         addExistingItemsToEdit: function(taskIndex, taskTitle) {
             this.currentTaskEditingIndex = taskIndex;
             this.currentTaskEditingTitle = taskTitle;
+        },
+        removeExistingItemsToEdit: function () {
+            this.currentTaskEditingTitle = null;
+            this.currentTaskEditingIndex = null;
         }
     };
 }
