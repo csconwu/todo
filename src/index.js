@@ -26,7 +26,8 @@ import {setBlockOrNoneDisplay} from "./domEdit";
         let taskFormButtons = newTaskFormClone.querySelectorAll('button');
         taskFormButtons[0].addEventListener('click',closeTaskForm);
         taskFormButtons[1].addEventListener('click',saveTask);
-        let element = domEdit.createGrouperDiv(title,newTaskFormClone,openNewTaskForm,openExistingGrouperForm);
+        let element = domEdit.createGrouperDiv(title,newTaskFormClone,openNewTaskForm,openExistingGrouperForm,
+            deleteExistingGrouper);
         element.querySelector('.grouperExpandbtn').addEventListener('click', function(e) {
             toggleExpandGrouperTasks(element.querySelector('.allTasksContainer'));
         });
@@ -95,6 +96,14 @@ import {setBlockOrNoneDisplay} from "./domEdit";
         const newTask = taskEdit.createTaskObject(values[0],values[1],null,values[2],false);
         const newTaskDiv = createTaskElement(newTask.title, newTask.description);
         return {newTask, newTaskDiv};
+    }
+    function deleteExistingGrouper(e) {
+        if (window.confirm("This will delete this Project grouper and all it's tasks within it." +
+            "\n Are you sure you want to proceed?") !== true) {return}
+        const modifyItems = getItemsForModifyGrouper(e);
+        userArray.splice(modifyItems.grouperIndex,1);
+        modifyItems.grouperDiv.remove();
+        console.log(userArray);
     }
     function deleteExistingTask(e) {
         if (window.confirm('Are you sure you want to delete this task?') !== true) {return}
@@ -173,6 +182,8 @@ import {setBlockOrNoneDisplay} from "./domEdit";
         const removeForm = setTimeout(function() {
             domEdit.setBlockOrNoneDisplay([newGrouperButton.parentElement],[newGrouperPopup])
         },500)
+        userArray.currentGrouperEditingDiv = userArray.currentGrouperTitleElement =
+            userArray.currentGrouperEditingIndex = userArray.currentGrouperEditingTitle = null;
     }
     function openExistingGrouperForm(e) {
         openNewGrouperForm();
