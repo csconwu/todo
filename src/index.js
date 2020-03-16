@@ -293,7 +293,7 @@ import {setBlockOrNoneDisplay} from "./domEdit";
         for (let i=0;i<buttonArray.length;i++) {buttonArray[i].disabled = true}
     }
     function preventEnterOnFields(e) {
-        if (e.key === 'Enter' && document.activeElement.tagName === 'input') {
+        if (e.key === 'Enter' && document.activeElement.tagName === 'INPUT') {
             e.preventDefault();
         }
     }

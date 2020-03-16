@@ -173,6 +173,7 @@ textarea {
 .modifyTask {
     font-size: 120%;
     background-color: inherit;
+    color: gray;
     width: 100%;
     height: 40px;
     border: none;
@@ -188,8 +189,8 @@ textarea {
     height: 70px;
     outline: none;
     margin: 10px;
-    border: solid 1px darkgray;
-    border-radius: 10px;
+    border: none;
+    border-radius: 40px;
     color: gray;
 }
 .modifyTask:hover {
@@ -215,6 +216,12 @@ textarea {
     z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
 }
 @media only screen and (max-width: 980px) {
+    html {
+        font-size: 150%;
+    }
+    .newGrouperForm button, .newTaskForm button{
+        width: 160px;
+    }
     .task {
         width: 95%;
     }
@@ -222,6 +229,13 @@ textarea {
         width: 85%;
     }
     .modifyGrouperContainer {
-        width: 80%;
+        width: 85%;
+    }
+    .modifyGrouper {
+        height: 100px;
+    }
+    .modifyTask {
+        height: 60px;
+        font-size: 150%;
     }
 }

@@ -60,7 +60,7 @@ function createGrouperDiv(title, addElement, addTaskFunction, renameGrouperFunc,
     addButton.addEventListener('click', addTaskFunction);
     renameButton.addEventListener('click',renameGrouperFunc);
     deleteButton.addEventListener('click',deleteGrouperFunc);
-    setInnerHtml(expandButton, 'h2', "↕");
+    setInnerHtml(expandButton, 'h2', "&#8597");
     appendElements(titleContainer,[grouperTitle,expandButton]);
     appendElements(modifyGrouperContainer,[addButton,renameButton,deleteButton])
     appendElements(grouperDiv,[titleContainer, modifyGrouperContainer, addElement, allTasksContainer]);
@@ -71,7 +71,7 @@ function createTaskDiv(title, description) {
     let titleContainer = createElement('div', 'taskTitleContainer');
     let taskTitle = createElementAndSetText('h4', 'taskTitle', title);
     let expandButton = createElement('button', ['taskExpandbtn']);
-    setInnerHtml(expandButton, 'h4', "↕");
+    setInnerHtml(expandButton, 'h4', "&#8597");
     expandButton.firstElementChild.classList.add('noStrike');
     let taskContent = createElement('div',['taskContent']);
     setInnerHtml(taskContent,'p',description);
