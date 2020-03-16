@@ -26,7 +26,7 @@ import {setBlockOrNoneDisplay} from "./domEdit";
         let taskFormButtons = newTaskFormClone.querySelectorAll('button');
         taskFormButtons[0].addEventListener('click',closeTaskForm);
         taskFormButtons[1].addEventListener('click',saveTask);
-        let element = domEdit.createGrouperDiv(title,newTaskFormClone,openNewTaskForm);
+        let element = domEdit.createGrouperDiv(title,newTaskFormClone,openNewTaskForm,openExistingGrouperForm);
         element.querySelector('.grouperExpandbtn').addEventListener('click', function(e) {
             toggleExpandGrouperTasks(element.querySelector('.allTasksContainer'));
         });
@@ -63,15 +63,17 @@ import {setBlockOrNoneDisplay} from "./domEdit";
         return grouperObject.tasks.findIndex(
             task=>task.title === taskTitle);
     }
-    function saveNewGrouper() {
-        createGrouperElement(newGrouperField.value);
-        userArray.push(taskEdit.createNewGrouper(newGrouperField.value));
-        closeGrouperForm();
-    }
     function getGrouperAndFormElements(e) {
         const grouperElement = e.target.parentElement.parentElement.parentElement.parentElement;
         const grouperTaskForm = e.target.parentElement.parentElement;
         return {grouperElement, form: grouperTaskForm}
+    }
+    function getItemsForModifyGrouper(e) {
+        const grouperDiv  = e.target.parentElement.parentElement;
+        const grouperTitleElement = grouperDiv.querySelector('.grouperTitle');
+        const grouperTaskForm = grouperDiv.querySelector('newTaskPopup');
+        const grouperIndex = getGrouperIndex(grouperDiv);
+        return {grouperDiv,grouperTitleElement,grouperTaskForm, grouperIndex}
     }
     function getItemsForModifyTask(e) {
         const taskDiv = e.target.parentElement.parentElement;
@@ -112,6 +114,24 @@ import {setBlockOrNoneDisplay} from "./domEdit";
             modifyItems.taskObj.status = true;
         }
     }
+    function saveNewGrouper() {
+        createGrouperElement(newGrouperField.value);
+        userArray.push(taskEdit.createNewGrouper(newGrouperField.value));
+        closeGrouperForm();
+    }
+    function saveExistingGrouper() {
+        const grouperObj = userArray[userArray.currentGrouperEditingIndex];
+        grouperObj.title = userArray.currentGrouperEditingDiv.title =
+            userArray.currentGrouperTitleElement.textContent = newGrouperField.value;
+        closeGrouperForm();
+    }
+    function saveGrouper() {
+        if (newGrouperPopup.classList.contains('editingExistingGrouper')) {
+            saveExistingGrouper();
+        } else {
+            saveNewGrouper();
+        }
+    }
     function saveExistingTask(newGrouperItems, newTaskItems) {
         const grouperIndex = getGrouperIndex(newGrouperItems.grouperElement);
         userArray[grouperIndex].replaceExistingTask(userArray[grouperIndex].currentTaskEditingIndex,
@@ -133,28 +153,37 @@ import {setBlockOrNoneDisplay} from "./domEdit";
         }
         closeTaskForm(e);
     }
-    function openNewGrouperForm() {
-        domEdit.setBlockOrNoneDisplay([newGrouperPopup],[]);
+    function cancelNewGrouper() {closeGrouperForm()}
+    function bringUpForm(form) {
+        domEdit.setBlockOrNoneDisplay([form],[]);
         const animateForm = setTimeout(function() {
-            testUnshrinkForm(newGrouperPopup);
+            testUnshrinkForm(form)
         },100);
+    }
+    function bringUpTaskForm(taskForm) {
+        bringUpForm(taskForm)
+    }
+    function openNewGrouperForm() {
+        bringUpForm(newGrouperPopup);
     }
     function closeGrouperForm() {
         testShrinkForm(newGrouperPopup);
+        newGrouperPopup.classList.remove('editingExistingGrouper');
         domEdit.clearDomInputValues([newGrouperField]);
         const removeForm = setTimeout(function() {
             domEdit.setBlockOrNoneDisplay([newGrouperButton.parentElement],[newGrouperPopup])
         },500)
     }
-    function cancelNewGrouper() {closeGrouperForm()}
-    function bringUpTaskForm(taskForm) {
-        domEdit.setBlockOrNoneDisplay([taskForm],[]);
-        const inputElements = Array.from(taskForm.querySelectorAll('[class*=Input]'));
-        inputElements.forEach(input=>{input.style.opacity = '1'});
-        /*expandForm(taskForm);*/
-        const animateForm = setTimeout(function() {
-            testUnshrinkForm(taskForm)
-        },100);
+    function openExistingGrouperForm(e) {
+        openNewGrouperForm();
+        newGrouperPopup.classList.add('editingExistingGrouper');
+        const modifyItems = getItemsForModifyGrouper(e);
+        const oldTitle = userArray[modifyItems.grouperIndex].title;
+        userArray.currentGrouperEditingTitle = oldTitle;
+        userArray.currentGrouperEditingIndex = modifyItems.grouperIndex;
+        userArray.currentGrouperTitleElement = modifyItems.grouperTitleElement;
+        userArray.currentGrouperEditingDiv = modifyItems.grouperDiv;
+        newGrouperField.value = oldTitle;
     }
     function openNewTaskForm(e) {
         bringUpTaskForm(e.target.parentElement.nextElementSibling);
@@ -218,7 +247,7 @@ import {setBlockOrNoneDisplay} from "./domEdit";
             e.preventDefault();
         }
     }
-    saveNewGrouperButton.addEventListener('click',saveNewGrouper);
+    saveNewGrouperButton.addEventListener('click',saveGrouper);
     newGrouperButton.addEventListener('click',openNewGrouperForm);
     cancelNewGrouperButton.addEventListener('click',cancelNewGrouper);
     window.addEventListener('keypress', preventEnterOnFields);

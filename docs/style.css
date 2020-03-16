@@ -62,7 +62,7 @@ header h1{
     font-size: 2em;
     margin: 20px 30px;
 }
-.newbtn:hover {
+.newbtn:hover, .modifyGrouper:hover {
     background-color: gray;
     color: white;
 }
@@ -163,7 +163,7 @@ textarea {
 }
 .modifyGrouperContainer {
     display: grid;
-    grid-template-columns: 1fr 2fr 2fr;
+    grid-template-columns: 1.5fr 2fr 2fr;
     grid-gap: 10px;
     justify-items: center;
     padding: 5px 10px;

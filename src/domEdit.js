@@ -41,7 +41,7 @@ function calculateTotalHeightWithMargin(elementArray, marginSize) {
     totalHeight += elementArray.length * marginSize;
     return totalHeight;
 }
-function createGrouperDiv(title, addElement, addTaskFunction) { //with button at the top
+function createGrouperDiv(title, addElement, addTaskFunction, renameGrouperFunc) { //with button at the top
     let grouperDiv = createElement('div', 'grouper',['title',title]);
     let titleContainer = createElement('div', 'grouperTitleContainer');
     let grouperTitle = createElementAndSetText('h2','grouperTitle',title);
@@ -54,6 +54,7 @@ function createGrouperDiv(title, addElement, addTaskFunction) { //with button at
     let deleteButton = createElementAndSetText('button',['modifyGrouper','deleteGrouper'],
         'Delete this Project Grouper',['type', 'button']);
     addButton.addEventListener('click', addTaskFunction);
+    renameButton.addEventListener('click',renameGrouperFunc);
     setInnerHtml(expandButton, 'h2', "↕");
     appendElements(titleContainer,[grouperTitle,expandButton]);
     appendElements(modifyGrouperContainer,[addButton,renameButton,deleteButton])
