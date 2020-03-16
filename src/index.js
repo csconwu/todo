@@ -24,7 +24,7 @@ import {setBlockOrNoneDisplay} from "./domEdit";
     function createGrouperElement(title) {
         const newTaskFormClone = newTaskForm.cloneNode(true);
         let taskFormButtons = newTaskFormClone.querySelectorAll('button');
-        taskFormButtons[0].addEventListener('click',closeTaskForm);
+        taskFormButtons[0].addEventListener('click',cancelTaskForm);
         taskFormButtons[1].addEventListener('click',saveTask);
         let element = domEdit.createGrouperDiv(title,newTaskFormClone,openNewTaskForm,openExistingGrouperForm,
             deleteExistingGrouper);
@@ -247,6 +247,11 @@ import {setBlockOrNoneDisplay} from "./domEdit";
     }
     function clearCurrentEditingTaskItems(grouperObj) {
         grouperObj.removeExistingItemsToEdit();
+    }
+    function cancelTaskForm(e) {
+        const newGrouperItems = getGrouperAndFormElements(e);
+        const grouperIndex = getGrouperIndex(newGrouperItems.grouperElement);
+        closeTaskForm(e, userArray[grouperIndex]);
     }
     function closeTaskForm(e, grouperObj) {
         let popup = e.target.parentElement.parentElement.parentElement;
