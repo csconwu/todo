@@ -173,7 +173,7 @@ textarea {
 .modifyTask {
     font-size: 120%;
     background-color: inherit;
-    color: gray;
+    color: darkslategray;
     width: 100%;
     height: 40px;
     border: none;
@@ -191,7 +191,7 @@ textarea {
     margin: 10px;
     border: none;
     border-radius: 40px;
-    color: gray;
+    color: darkslategray;
 }
 .modifyTask:hover {
     background-color: darkgray;

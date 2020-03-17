@@ -1,18 +1,22 @@
-
 function createTaskObject(title,description,priority,dueDate,status) {
     return {title, description, priority, dueDate, status}
 }
-function createGrouper(title, numOfTasks, tasks, id, currentTaskEditingIndex, currentTaskEditingTitle) {
+function createGrouper(title, numOfTasks, tasks, id) {
     return  {
         title: title,
         numOfTasks: numOfTasks,
         tasks: tasks,
         id: id,
-        currentTaskEditingIndex: currentTaskEditingIndex,
-        currentTaskEditingTitle: currentTaskEditingTitle,
+        currentTaskEditingIndex: null,
+        currentTaskEditingTitle: null,
         addNewTask: function(taskObject) {
             this.tasks.push(taskObject);
             this.numOfTasks++;
+        },
+        deleteTask: function(taskIndex) {
+            // modifyItems.grouperObj.tasks.splice(modifyItems.taskIndex,1);
+            this.tasks.splice(taskIndex,1);
+            this.numOfTasks--;
         },
         replaceExistingTask: function(oldTaskIndex,newTaskObject) {
             this.tasks.splice(oldTaskIndex, 1, newTaskObject);

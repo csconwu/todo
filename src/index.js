@@ -1,6 +1,7 @@
 import * as domEdit from "./domEdit";
 import * as taskEdit from "./taskEdit";
 import {setBlockOrNoneDisplay} from "./domEdit";
+import {createNewGrouper} from "./taskEdit";
 
 (function toDoPage() {
     let userArray = [];
@@ -12,13 +13,24 @@ import {setBlockOrNoneDisplay} from "./domEdit";
     const newGrouperPopup = document.getElementById('newGrouperPopup');
     const newTaskForm = document.querySelector('.newTaskPopup');
 
-    if (localStorage.length>0) {} else {userArray.push(taskEdit.createDefaultGrouper())}
-
-    for (let i=0; i<userArray.length; i++) {
-        let grouperDiv = createGrouperElement(userArray[i].title);
-        for (let a = 0; a < userArray[i].numOfTasks; a++) {
-            let taskDiv = domEdit.createTaskDiv(userArray[i].tasks[a].title);
-            grouperDiv.appendChild(taskDiv);
+    if (localStorage.getItem('hasToDoList') === 'true') {
+        updateUserArrayFromLocalStorage();
+    } else {
+        const newGrouper = taskEdit.createDefaultGrouper();
+        userArray.push(newGrouper);
+        localStorage.setItem('hasToDoList','true');
+        updateLocalStorage();
+    }
+    const m = userArray.length;
+    for (let i=0; i<m; i++) {
+        const grouperObj = userArray[i];
+        let grouperDiv = createGrouperElement(grouperObj.title);
+        const n = userArray[i].numOfTasks;
+        for (let a = 0; a < n; a++) {
+            const taskObj = grouperObj.tasks[a];
+            const taskDiv = createTaskElement(taskObj.title, taskObj.description);
+            renderNewTaskElement(grouperDiv.querySelector('.allTasksContainer'),taskDiv);
+            if (taskObj.status) {taskDiv.querySelector('.changeTaskStatus').click()}
         }
     }
     function createGrouperElement(title) {
@@ -103,12 +115,15 @@ import {setBlockOrNoneDisplay} from "./domEdit";
         const modifyItems = getItemsForModifyGrouper(e);
         userArray.splice(modifyItems.grouperIndex,1);
         modifyItems.grouperDiv.remove();
+        console.log(userArray);
+        updateLocalStorage();
     }
     function deleteExistingTask(e) {
         if (window.confirm('Are you sure you want to delete this task?') !== true) {return}
         const modifyItems = getItemsForModifyTask(e);
-        modifyItems.grouperObj.tasks.splice(modifyItems.taskIndex,1);
+        modifyItems.grouperObj.deleteTask(modifyItems.taskIndex);
         modifyItems.taskDiv.remove();
+        updateLocalStorage();
     }
     function toggleTaskStatus(e) {
         const modifyItems = getItemsForModifyTask(e);
@@ -121,6 +136,7 @@ import {setBlockOrNoneDisplay} from "./domEdit";
             e.target.textContent = "Not Done?"
             modifyItems.taskObj.status = true;
         }
+        updateLocalStorage();
     }
     function saveGrouperChecks(newTitle) {
         const alreadyExists = userArray.some(grouper => {
@@ -171,6 +187,7 @@ import {setBlockOrNoneDisplay} from "./domEdit";
         } else {
             saveNewGrouper();
         }
+        updateLocalStorage();
     }
     function saveExistingTask(newGrouperItems, newTaskItems,grouperIndex) {
         userArray[grouperIndex].replaceExistingTask(userArray[grouperIndex].currentTaskEditingIndex,
@@ -179,13 +196,13 @@ import {setBlockOrNoneDisplay} from "./domEdit";
     }
     function saveNewTask(newGrouperItems, newTaskItems, grouperIndex) {
         userArray[grouperIndex].addNewTask(newTaskItems.newTask);
-        renderNewTaskElement(newGrouperItems.grouperElement.querySelector('.allTasksContainer'),newTaskItems.newTaskDiv);
+        renderNewTaskElement(newGrouperItems.grouperElement.querySelector('.allTasksContainer'),
+            newTaskItems.newTaskDiv);
     }
     function saveTask(e) {
         const newGrouperItems = getGrouperAndFormElements(e);
         const newTaskItems = taskCreationPlaceHolder(newGrouperItems.grouperElement,newGrouperItems.form);
         const grouperIndex = getGrouperIndex(newGrouperItems.grouperElement);
-
         const checkMessage = saveTaskChecks(grouperIndex,newTaskItems.newTask.title, newTaskItems.newTask.description);
         if (checkMessage) {
             window.alert(checkMessage);
@@ -196,6 +213,7 @@ import {setBlockOrNoneDisplay} from "./domEdit";
         } else {
             saveNewTask(newGrouperItems,newTaskItems,grouperIndex);
         }
+        updateLocalStorage();
         closeTaskForm(e, userArray[grouperIndex]);
     }
     function cancelNewGrouper() {closeGrouperForm()}
@@ -247,6 +265,7 @@ import {setBlockOrNoneDisplay} from "./domEdit";
     }
     function clearCurrentEditingTaskItems(grouperObj) {
         grouperObj.removeExistingItemsToEdit();
+        updateLocalStorage();
     }
     function cancelTaskForm(e) {
         const newGrouperItems = getGrouperAndFormElements(e);
@@ -302,6 +321,48 @@ import {setBlockOrNoneDisplay} from "./domEdit";
             e.preventDefault();
         }
     }
+    function updateLocalStorage() {
+        //delete all todo first
+        let iLength = localStorage.length-1; //going backwards for loop
+        for (iLength; iLength>=0; iLength--) {
+            if (localStorage.key(iLength).includes('TODO')) {
+                localStorage.removeItem(localStorage.key(iLength));
+            }
+        }
+        const ul = userArray.length;
+        for (let i=0; i<ul; i++) {
+            const grouperObj = Object.assign({},userArray[i]);
+            const tl = grouperObj.numOfTasks;
+            let formattedTasks = [];
+            for (let a = 0; a < tl; a++) {
+                let taskObj = Object.assign({},grouperObj.tasks[a]);
+                formattedTasks.push(JSON.stringify(taskObj));
+            }
+            grouperObj.formattedTasks = JSON.stringify(formattedTasks);
+            localStorage.setItem(`TODO${i}`,JSON.stringify(grouperObj));
+        }
+    }
+    function updateUserArrayFromLocalStorage() {
+        const lsLength = localStorage.length;
+        for (let i = 0; i < lsLength; i++) {
+            if (localStorage.key(i).includes('TODO')) {
+                let grouperObj = JSON.parse(localStorage.getItem(localStorage.key(i)));
+                grouperObj.tasks = [];
+                let convertedArray = JSON.parse(grouperObj.formattedTasks);
+                const tl = grouperObj.numOfTasks;
+                for (let a=0; a<tl;a++) {
+                    let taskObj = convertedArray[a];
+                    grouperObj.tasks.push(JSON.parse(taskObj));
+                }
+                const grouperObjWithFunctions = taskEdit.createNewGrouper(grouperObj.title);
+                for (let key in grouperObj) {
+                    grouperObjWithFunctions[key] = grouperObj[key];
+                }
+                userArray.push(grouperObjWithFunctions);
+            }
+        }
+    }
+
     saveNewGrouperButton.addEventListener('click',saveGrouper);
     newGrouperButton.addEventListener('click',openNewGrouperForm);
     cancelNewGrouperButton.addEventListener('click',cancelNewGrouper);
