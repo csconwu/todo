@@ -343,10 +343,10 @@ import {createNewGrouper} from "./taskEdit";
         }
     }
     function updateUserArrayFromLocalStorage() {
-        const lsLength = localStorage.length;
-        for (let i = 0; i < lsLength; i++) {
-            if (localStorage.key(i).includes('TODO')) {
-                let grouperObj = JSON.parse(localStorage.getItem(localStorage.key(i)));
+        let lsLength = localStorage.length -1;
+        for (lsLength; lsLength >= 0; lsLength--) {
+            if (localStorage.key(lsLength).includes('TODO')) {
+                let grouperObj = JSON.parse(localStorage.getItem(localStorage.key(lsLength)));
                 grouperObj.tasks = [];
                 let convertedArray = JSON.parse(grouperObj.formattedTasks);
                 const tl = grouperObj.numOfTasks;
